@@ -3,26 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RabbitMQ.Client;
+using RabbitMqLibrary;
 
 namespace RabbitMQIntro
 {
     class Program
     {
-        private const string hostName = "localhost";
-        private const string userName = "guest";
-        private const string password = "guest";
-
         static void Main(string[] args)
         {
-            var factory = new RabbitMQ.Client.ConnectionFactory()
-            {
-                Password = password,
-                UserName = userName,
-                HostName = hostName
-            };
-            var connection = factory.CreateConnection();
-            var model = connection.CreateModel();
+            var mq = new RabbitMq();
+
+            mq.Send("kevin sending from vs");
 
             #region create exchange/queue/binding
 
@@ -43,11 +34,8 @@ namespace RabbitMQIntro
 
             #region sending 
 
-            var properties = model.CreateBasicProperties();
-            properties.Persistent = false;
-
-            byte[] messageBuffer = Encoding.Default.GetBytes("this is my message from vs again");
-            model.BasicPublish(exchangeName, queueName, properties, messageBuffer);
+            //var properties = model.CreateBasicProperties();
+            //properties.Persistent = false
             Console.WriteLine("Message sent");
 
             #endregion
